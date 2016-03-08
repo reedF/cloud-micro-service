@@ -1,0 +1,29 @@
+---
+server:
+  port: 8080
+
+spring:
+  application:
+    name: eureka-client
+  cloud:
+    config:
+      enabled: false
+      uri: http://localhost:8888
+
+endpoints:
+  enabled: false
+  info:
+    enabled: true
+  health:
+    enabled: true
+
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    metadataMap:
+      instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${server.port}}}
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
