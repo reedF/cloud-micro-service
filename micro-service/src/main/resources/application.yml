@@ -10,6 +10,7 @@ spring:
       enabled: false
       uri: http://localhost:8888
 
+# vcap是Cloudfoundry提供的命名访问规范，可获取节点实例信息
 eureka:
   instance:
     leaseRenewalIntervalInSeconds: 10
