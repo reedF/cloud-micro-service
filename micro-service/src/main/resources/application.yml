@@ -20,4 +20,5 @@ eureka:
     registerWithEureka: true
     fetchRegistry: true
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      # HA-if more eureka server,can using:"," to give a node list for backup,such as "node1,node2"
+      defaultZone: http://localhost:8761/eureka/,http://localhost:8762/eureka/
