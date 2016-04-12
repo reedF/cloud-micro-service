@@ -15,6 +15,7 @@
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<docker.image.prefix>cloud-micro-service</docker.image.prefix>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -44,5 +45,49 @@
 			<artifactId>spring-cloud-starter-feign</artifactId>
 		</dependency>
 	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>0.4.5</version>
+				<configuration>
+					<dockerHost>http://192.168.59.103:2375</dockerHost>
+					<imageName>${docker.image.prefix}/${project.artifactId}</imageName>
+					<!-- 使用本地dockerfile，此时baseImage等配置无效 -->
+					<!-- <dockerDirectory>src/main/docker</dockerDirectory> -->
+					<!-- 依赖的上层镜像，编译时会自动从 docker hub下载-->
+					<baseImage>java:7</baseImage>
+					<entryPoint>["java", "-jar", "/${project.build.finalName}.jar"]</entryPoint>
+					<resources>
+						<resource>
+							<targetPath>/</targetPath>
+							<directory>${project.build.directory}</directory>
+							<include>${project.build.finalName}.jar</include>
+						</resource>
+					</resources>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
+	<description>boot2docker使用：http://www.tuicool.com/articles/zEBRJfJ
+docker-maven-plugin使用注意事项
+1.&lt;dockerHost&gt;：配置docker engine server,当使用boot2docker时,默认访问IP为192.168.59.103（可通过运行命令：boot2docker ip查看）
+2.如使用boot2docker时，需配置&quot;/var/lib/boot2docker/profile&quot;,
+在其中添加：
+&quot;
+DOCKER_TLS=no
+EXTRA_ARGS=&quot;--insecure-registry 192.168.59.103:5000&quot;
+&quot;或配置权限校验环境变量
+否则无法访问 http://192.168.59.103:2375,
+参见：https://github.com/spotify/docker-maven-plugin/issues/34
+3.编译镜像：mvn docker:build
+4.docker run命令使用：
+docker run -d -p 8761:8761 cloud-micro-service/micro-service
+-d 后台运行
+-p 8761:8761 映射docker容器端口8761为外部宿主机端口8761
+--name 可设置应用别名
+使用boot2docker时，容器外部通过http://192.168.59.103:8761访问应用
+具体参见：http://www.tuicool.com/articles/zEBRJfJ</description>
 </project>
