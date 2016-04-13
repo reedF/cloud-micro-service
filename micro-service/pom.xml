@@ -72,6 +72,7 @@
 	</build>
 
 	<description>boot2docker使用：http://www.tuicool.com/articles/zEBRJfJ
+docker中文文档：https://github.com/widuu/chinese_docker
 docker-maven-plugin使用注意事项
 1.&lt;dockerHost&gt;：配置docker engine server,当使用boot2docker时,默认访问IP为192.168.59.103（可通过运行命令：boot2docker ip查看）
 2.如使用boot2docker时，需配置&quot;/var/lib/boot2docker/profile&quot;,
