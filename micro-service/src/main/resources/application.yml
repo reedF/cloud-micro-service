@@ -9,7 +9,17 @@ spring:
     config:
       enabled: false
       uri: http://localhost:8888
-
+  #zipkin
+  zipkin:
+    # Uncomment to send to zipkin, replacing 192.168.59.103 with your zipkin IP address if u using boot2docker
+    baseUrl: http://localhost:9411/
+  sleuth:
+    sampler:
+      percentage: 1.0
+    hystrix:
+      strategy:
+        enabled: true
+        
 # vcap是Cloudfoundry提供的命名访问规范，可获取节点实例信息
 eureka:
   instance:
@@ -21,4 +31,11 @@ eureka:
     fetchRegistry: true
     serviceUrl:
       # HA-if more eureka server,can using:"," to give a node list for backup,such as "node1,node2"
-      defaultZone: http://localhost:8761/eureka/,http://localhost:8762/eureka/
+      #defaultZone: http://localhost:8761/eureka/,http://localhost:8762/eureka/
+      defaultZone: http://localhost:8761/eureka/
+            
+# zipkin properties for ServiceApplication.java to debug when there is no zipkin server
+sample:
+  zipkin:
+    # When enabled=false, traces log to the console. Comment to send to zipkin
+    #enabled: false
