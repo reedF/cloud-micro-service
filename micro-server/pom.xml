@@ -1,0 +1,188 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.cloud</groupId>
+		<artifactId>spring-cloud-starter-parent</artifactId>
+		<version>Brixton.RC1</version>
+	</parent>
+	<artifactId>micro-server</artifactId>
+	<name>micro-server</name>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
+		<docker.image.prefix>cloud-micro-service</docker.image.prefix>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-eureka-server</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aspects</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.zipkin</groupId>
+			<artifactId>zipkin-ui</artifactId>
+			<version>1.39.3</version>
+		</dependency>
+		<dependency>
+			<groupId>io.zipkin.java</groupId>
+			<artifactId>zipkin-server</artifactId>
+		</dependency>
+		<!-- zipkin server need -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-sleuth-zipkin</artifactId>
+		</dependency>
+		<!-- stream -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-sleuth-zipkin-stream</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-stream-rabbit</artifactId>
+		</dependency>
+		<!-- stream end -->
+		<!-- db -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+		<!-- zipkin server need end -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<version>1.3.3.RELEASE</version>
+		</dependency>
+	</dependencies>
+	<profiles>
+		<profile>
+			<!-- eureka -->
+			<id>eureka</id>
+			<properties>
+				<start-class>com.reed.micro.server.eureka.EurekaServerApplication</start-class>
+				<build.profile.id>eureka</build.profile.id>
+			</properties>
+			<!-- 默认激活eureka -->
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<!-- <build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<excludes>
+								<exclude>**/com/reed/micro/server/zipkin/*</exclude>
+							</excludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build> -->
+		</profile>
+		<profile>
+			<!-- zipkin -->
+			<id>zipkin</id>
+			<properties>
+				<build.profile.id>zipkin</build.profile.id>
+				<start-class>com.reed.micro.server.zipkin.ZipkinServerApplication</start-class>
+			</properties>
+			<dependencies>				
+				<!-- kafka stream -->
+				<!-- <dependency> <groupId>org.springframework.cloud</groupId> <artifactId>spring-cloud-starter-stream-kafka</artifactId> 
+					</dependency> -->				
+			</dependencies>
+		</profile>
+	</profiles>
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<configuration>
+					<!-- specify UTF-8, ISO-8859-1 or any other file encoding -->
+					<encoding>UTF-8</encoding>
+					<delimiters>
+						<delimiter>${*}</delimiter>
+						<delimiter>@</delimiter>
+					</delimiters>
+					<useDefaultDelimiters>false</useDefaultDelimiters>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>0.4.5</version>
+				<configuration>
+					<dockerHost>http://192.168.59.103:2375</dockerHost>
+					<imageName>${docker.image.prefix}/${project.artifactId}</imageName>
+					<!-- 使用本地dockerfile，此时baseImage等配置无效 -->
+					<!-- <dockerDirectory>src/main/docker</dockerDirectory> -->
+					<!-- 依赖的上层镜像，编译时会自动从 docker hub下载 -->
+					<baseImage>java:8</baseImage>
+					<entryPoint>["java", "-jar", "/${project.build.finalName}.jar"]</entryPoint>
+					<resources>
+						<resource>
+							<targetPath>/</targetPath>
+							<directory>${project.build.directory}</directory>
+							<include>${project.build.finalName}.jar</include>
+						</resource>
+					</resources>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<repositories>
+		<repository>
+			<id>spring-milestones</id>
+			<name>Spring Milestones</name>
+			<url>http://repo.spring.io/milestone</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot</artifactId>
+				<version>1.3.3.RELEASE</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	<description>1.zipkin server必须运行在jdk8环境
+2.zipkin-ui包添加后可看到zipkin UI界面
+3.本项目同时提供了Eureka和Zipkin两种server,需在maven构建时通过指定profile控制启动对应的server，命令：mvn clean packege -P eureka,当使用IDE启动maven时，需配置goal和profiles，同时保证jre为8
+4.由于pom父依赖spring-boot-starter-parent里对占位符重定义为“&lt;resource.delimiter&gt;@&lt;/resource.delimiter&gt;”，故本地配置参数占位符时不可使用默认格式“${XXX}”而需改为“@XXX@”,或重新定义maven-resources-plugin覆盖父依赖配置，参见：http://blog.rapasoft.eu/resource-filtering-in-spring-boot
+5.单独启动zipkin server时使用注解@EnableZipkinServer（此时依赖中不可添加stream相关jar）；如使用stream方式接收trace信息时，使用注解@EnableZipkinStreamServer，且同时添加stream相关依赖（见pom注释）
+6.使用stream方式订阅trace信息时，spring-cloud-starter-stream-kafka与spring-cloud-starter-stream-rabbit依赖不可同时使用</description>
+	<version>1.0-SNAPSHOT</version>
+	<groupId>com.reed.micro.service</groupId>
+</project>
