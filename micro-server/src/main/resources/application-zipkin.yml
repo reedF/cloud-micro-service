@@ -15,6 +15,7 @@ spring:
   rabbitmq:
     addresses: ${RABBIT_HOST:172.28.19.78:5672,172.28.19.80:5672}
   datasource:
+    #脚本位置：依赖spanstore-jdbc-0.9.3.jar内
     schema: classpath:/mysql.sql
     url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/zipkin
     username: root
