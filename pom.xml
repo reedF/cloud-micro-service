@@ -62,8 +62,13 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<!-- zipkin -->		
+		<!-- zipkin ,spring-cloud-starter-zipkin同时包括了spring-cloud-starter-sleuth和spring-cloud-sleuth-zipkin-->
 		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-zipkin</artifactId>
+			<version>${spring.sleuth.version}</version>
+		</dependency>		
+<!-- 		<dependency>
         	<groupId>org.springframework.cloud</groupId>
         	<artifactId>spring-cloud-starter-sleuth</artifactId>
         	<version>${spring.sleuth.version}</version>
@@ -72,7 +77,7 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-sleuth-zipkin</artifactId>
 			<version>${spring.sleuth.version}</version>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-commons</artifactId>
@@ -146,8 +151,30 @@
             	<artifactId>spring-cloud-sleuth</artifactId>
             	<version>${spring.sleuth.version}</version>
 			</dependency>
+			<!-- zipkin stream -->
+			<dependency>
+				<groupId>org.springframework.integration</groupId>
+				<artifactId>spring-integration-amqp</artifactId>
+				<version>4.2.5.RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.integration</groupId>
+				<artifactId>spring-integration-core</artifactId>
+				<version>4.2.5.RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.amqp</groupId>
+				<artifactId>spring-rabbit</artifactId>
+				<version>1.5.4.RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.amqp</groupId>
+				<artifactId>spring-amqp</artifactId>
+				<version>1.5.4.RELEASE</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<description>1.强制使用spring-4.2.5版本，修正Angel.SR6对老版依赖的兼容问题
-2.强制使用hystrix-javanica-1.4.20版，修正hystrix bug：当添加Throwable参数到fallbackmethod以获取异常信息时，@HystrixCommand找不到该方法的bug,参见：https://github.com/Netflix/Hystrix/issues/1015</description>
+2.强制使用hystrix-javanica-1.4.20版，修正hystrix bug：当添加Throwable参数到fallbackmethod以获取异常信息时，@HystrixCommand找不到该方法的bug,参见：https://github.com/Netflix/Hystrix/issues/1015
+3.引入spring-cloud-starter-zipkin依赖，实现跟踪链，spring-cloud-starter-zipkin会同时引入spring-cloud-starter-sleuth和spring-cloud-sleuth-zipkin，无需单配二者的依赖,但同时引入二者时，不可再引入spring-cloud-sleuth-stream使用stream传送trace data，否则会有冲突导致org.springframework.cloud.sleuth.stream.HostLocator无法加载，故spring-cloud-sleuth-stream和spring-cloud-sleuth-zipkin只可使用其一</description>
 </project>

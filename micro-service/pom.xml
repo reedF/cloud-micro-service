@@ -31,18 +31,29 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-hystrix</artifactId>
 		</dependency>
-		<dependency>
+<!-- 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-hystrix-dashboard</artifactId>
-		</dependency>
+		</dependency> -->
 		<!-- feign -->
-		<dependency>
+<!-- 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-ribbon</artifactId>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-feign</artifactId>
+		</dependency>
+		<!-- zipkin for client using stream to send trace msg to zipkin server -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-sleuth-stream</artifactId>
+			<version>${spring.sleuth.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-stream-rabbit</artifactId>
+			<version>${spring.sleuth.version}</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -56,7 +67,7 @@
 					<imageName>${docker.image.prefix}/${project.artifactId}</imageName>
 					<!-- 使用本地dockerfile，此时baseImage等配置无效 -->
 					<!-- <dockerDirectory>src/main/docker</dockerDirectory> -->
-					<!-- 依赖的上层镜像，编译时会自动从 docker hub下载-->
+					<!-- 依赖的上层镜像，编译时会自动从 docker hub下载 -->
 					<baseImage>java:7</baseImage>
 					<entryPoint>["java", "-jar", "/${project.build.finalName}.jar"]</entryPoint>
 					<resources>
@@ -90,5 +101,30 @@ docker run -d -p 8761:8761 cloud-micro-service/micro-service
 -p 8761:8761 映射docker容器端口8761为外部宿主机端口8761
 --name 可设置应用别名
 使用boot2docker时，容器外部通过http://192.168.59.103:8761访问应用
-具体参见：http://www.tuicool.com/articles/zEBRJfJ</description>
+具体参见：http://www.tuicool.com/articles/zEBRJfJ
+5.使用sleuth-stream作为trace data上传方式时，需强制使用integration的依赖版本为4.2.5，否则有兼容问题找不到com.esotericsoftware.shaded.org.objenesis.strategy.InstantiatorStrategy</description>
+	<dependencyManagement>
+		<dependencies>
+			<!-- <dependency>
+				<groupId>org.springframework.integration</groupId>
+				<artifactId>spring-integration-amqp</artifactId>
+				<version>4.2.5.RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.integration</groupId>
+				<artifactId>spring-integration-core</artifactId>
+				<version>4.2.5.RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.amqp</groupId>
+				<artifactId>spring-rabbit</artifactId>
+				<version>1.5.4.RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.amqp</groupId>
+				<artifactId>spring-amqp</artifactId>
+				<version>1.5.4.RELEASE</version>
+			</dependency> -->
+		</dependencies>
+	</dependencyManagement>
 </project>
