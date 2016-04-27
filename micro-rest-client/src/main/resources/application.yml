@@ -9,14 +9,21 @@ spring:
     config:
       enabled: false
       uri: http://localhost:8888
-  #zipkin
   zipkin:
-    # Uncomment to send to zipkin, replacing 192.168.59.103 with your zipkin IP address
-    baseUrl: http://localhost:9411/
+    #defult is true,to use zipkin,false:not use
+    enabled: true
+    baseUrl: http://localhost:9411/ 
+  # mq stream format to send trace data 
+  rabbitmq:
+    addresses: ${RABBIT_HOST:172.28.19.78:5672,172.28.19.80:5672}
   sleuth:
     sampler:
       percentage: 1.0
-      
+    # stream format  to send trace msg: enable sleuth.stream to use stream
+    # default is true,refer to SleuthStreamAutoConfiguration.java
+    stream:
+      enabled: false
+            
 endpoints:
   enabled: false
   info:
