@@ -27,7 +27,8 @@ import com.reed.cloud.micro.filter.HystrixRequestContextServletFilter;
  * 引入spring-cloud-sleuth-zipkin jar, 
  * 配置文件中使用：
  * spring.zipkin:baseUrl=http://${zipkin_server}:9411/
- * spring.zipkin.enabled=true spring.stream.enabled=false
+ * spring.zipkin.enabled=true 
+ * spring.stream.enabled=false
  * (2)Stream方式：
  * 引入spring-cloud-starter-sleuth和spring-cloud-sleuth-stream及stream相关的binder,如：spring-cloud-starter-stream-rabbit, 
  * 配置文件中使用： 
