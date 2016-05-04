@@ -11,9 +11,57 @@ spring:
     config:
       enabled: false
       uri: http://localhost:8888
-  #zipkin    
+    #zipkin input stream
+    stream:
+      #if multiple binders are present on the classpath,then setting default,type is: rabbit,kafka,redis
+      defaultBinder: mq2
+      #kafka's partition
+      instanceCount: 3
+      bindings:
+        #channel name,if using sleuth stream to send trace msg its name is "sleuth"
+        sleuth:
+          binder: mq2
+          group: sleuth-group
+          destination: sleuth
+          #consumer:
+          #  partitioned: true
+        #sleuth:
+        #  binder: mq1 
+        #  destination: sleuth
+      binders:
+        mq1:
+          type: rabbit
+        mq2:          
+          type: kafka
+          environment:
+            #kafka setting: refer to http://docs.spring.io/spring-cloud-stream/docs/1.0.0.RC2/reference/htmlsingle/index.html#_kafka_binder_properties
+            #refer to org.springframework.cloud.stream.binder.kafka.config.KafkaBinderConfigurationProperties.java
+            spring:
+              cloud:
+                stream:
+                  kafka:
+                    binder:
+                      brokers: 172.28.20.103:9092,172.28.20.104:9092,172.28.20.105:9092
+                      #defaultBrokerPort:
+                      zkNodes: 172.28.20.103:2181,172.28.20.104:2181,172.28.20.105:2181
+                      #defaultZkPort:
+                      replicationFactor: 2
+                      minPartitionCount: 3
+                    bindings:
+                      #channel name
+                      sleuth:
+                        #consumer setting
+                        consumer:
+                          startOffset: latest
+                          minPartitionCount: 3
+                          enableDlq: true                                                       
+  #rabbitmq setting 
   rabbitmq:
-    addresses: ${RABBIT_HOST:172.28.19.78:5672,172.28.19.80:5672}
+    #username: 
+    #password: 
+    addresses: ${RABBIT_HOST:172.28.19.78:5672,172.28.19.80:5672} 
+    
+  #db setting
   datasource:
     #脚本位置：依赖spanstore-jdbc-0.9.3.jar内
     schema: classpath:/mysql.sql
@@ -22,11 +70,16 @@ spring:
     password: 1234
     # Switch this on to create the schema on startup:
     initialize: true
-    continueOnError: true
-  #sleuth:
-  #  enabled: false
-  
-#zipkin server
+    continueOnError: true    
+  # not use sleuth stream to trace zipkin server itself
+  sleuth:
+    enabled: false
+    #refer to org.springframework.cloud.sleuth.instrument.hystrix.SleuthHystrixAutoConfiguration.java
+    hystrix:
+      strategy:
+        enabled: false
+          
+#zipkin server's storage
 zipkin:
   storage:
     type: mysql # default is mem (in-memory),mysql
