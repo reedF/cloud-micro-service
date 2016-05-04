@@ -9,12 +9,53 @@ spring:
     config:
       enabled: false
       uri: http://localhost:8888
+
+    #zipkin output stream,using mq stream format to send trace data 
+    stream:
+      #if multiple binders are present on the classpath,then setting default,type is: rabbit,kafka,redis
+      defaultBinder: mq2
+      #kafka's partition
+      instanceCount: 3
+      bindings:
+        #channel name,if using sleuth stream to send trace msg its name is "sleuth"
+        sleuth:
+          binder: mq2
+          destination: sleuth
+          producer:
+            partitionCount: 3
+        #sleuth:
+        #  binder: mq1 
+        #  destination: sleuth
+      binders:
+        mq1:
+          type: rabbit
+        mq2:          
+          type: kafka
+          
+      #kafka setting: refer to http://docs.spring.io/spring-cloud-stream/docs/1.0.0.RC2/reference/htmlsingle/index.html#_kafka_binder_properties
+      #refer to org.springframework.cloud.stream.binder.kafka.config.KafkaBinderConfigurationProperties.java
+      kafka:
+        binder:
+          brokers: 172.28.20.103:9092,172.28.20.104:9092,172.28.20.105:9092
+          #defaultBrokerPort:
+          zkNodes: 172.28.20.103:2181,172.28.20.104:2181,172.28.20.105:2181
+          #defaultZkPort:
+          replicationFactor: 2
+          minPartitionCount: 3
+        bindings:
+          #channel name
+          sleuth:
+            #producer setting
+            producer:
+              batchTimeout: 100   
+            
   #http format to send trace data to zipkin server,Uncomment while using http to send to zipkin, replacing 192.168.59.103 with your zipkin IP address if u using boot2docker
   zipkin:
     #defult is true,to use zipkin,false:not use
     enabled: false
     baseUrl: http://localhost:9411/ 
-  # mq stream format to send trace data 
+                                   
+  #rabbit setting 
   rabbitmq:
     addresses: ${RABBIT_HOST:172.28.19.78:5672,172.28.19.80:5672}
   #sleuth
@@ -44,8 +85,8 @@ eureka:
     fetchRegistry: true
     serviceUrl:
       # HA-if more eureka server,can using:"," to give a node list for backup,such as "node1,node2"
-      #defaultZone: http://localhost:8761/eureka/,http://localhost:8762/eureka/
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://localhost:8761/eureka/,http://192.168.59.103:8762/eureka/
+      #defaultZone: http://localhost:8761/eureka/
             
 # zipkin properties for ServiceApplication.java to debug when there is no zipkin server
 sample:
