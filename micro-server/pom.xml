@@ -136,7 +136,7 @@
 				<version>0.4.5</version>
 				<configuration>
 					<dockerHost>http://192.168.59.103:2375</dockerHost>
-					<imageName>${docker.image.prefix}/${project.artifactId}</imageName>
+					<imageName>${docker.image.prefix}/${project.artifactId}-${project.activeProfiles[0].id}</imageName>
 					<!-- 使用本地dockerfile，此时baseImage等配置无效 -->
 					<!-- <dockerDirectory>src/main/docker</dockerDirectory> -->
 					<!-- 依赖的上层镜像，编译时会自动从 docker hub下载 -->
