@@ -79,9 +79,9 @@ spring:
       strategy:
         enabled: false
           
-#zipkin server's storage
+#zipkin server's storage,refer to zipkin.server.ZipkinServerConfiguration.java
 zipkin:
-  storage:
+  store:
     type: mysql # default is mem (in-memory),mysql
  
     
