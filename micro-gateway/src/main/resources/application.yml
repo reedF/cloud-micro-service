@@ -1,0 +1,49 @@
+---
+server:
+  port: 8080
+
+spring:
+  application:
+    name: zuul-server
+  cloud:
+    config:
+      enabled: false
+      uri: http://localhost:8888
+  #disable sleuth zuul,
+  #refer to org.springframework.cloud.sleuth.instrument.zuul.TraceZuulAutoConfiguration    
+  #sleuth:
+  #  zuul:
+  #    enabled: false
+            
+endpoints:
+  enabled: false
+  info:
+    enabled: true
+  health:
+    enabled: true
+
+zuul:
+  #Service will be mapped under the /api URI
+  prefix: /api 
+#  Uncomment to disable auto-registering all services read from Eureka
+#  ignoredServices: '*'
+  routes:
+    test:
+      path: /redirect/**
+      url: http://www.baidu.com
+    by-url:
+      path: /url/**
+      url: http://localhost:8081
+
+
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    metadataMap:
+      instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${server.port}}}
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/,http://192.168.59.103:8762/eureka/
+   
