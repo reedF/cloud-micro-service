@@ -13,6 +13,8 @@ spring:
                   
 #eureka vcap是Cloudfoundry提供的命名访问规范，可获取节点实例信息
 eureka:
+  #server:
+  #  enableSelfPreservation: false
   instance:
     leaseRenewalIntervalInSeconds: 10
     metadataMap:
