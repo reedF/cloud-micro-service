@@ -16,6 +16,8 @@ eureka:
   #server:
   #  enableSelfPreservation: false
   instance:
+    #using ip to register not using hostname
+    preferIpAddress: true
     leaseRenewalIntervalInSeconds: 10
     metadataMap:
       instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${server.port}}}
@@ -23,7 +25,8 @@ eureka:
     registerWithEureka: false
     fetchRegistry: false
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/,http://192.168.59.103:8761/eureka/
-
+      #Eureka-HA:节点自发现：单eureka节点时，可配置本节点;多节点时,可配置为非本节点的其他eureka节点，格式：","分隔多节点
+      #defaultZone: http://localhost:8761/eureka/,http://192.168.59.103:8761/eureka/
+      defaultZone: http://192.168.56.1:8761/eureka/
  
     
