@@ -180,7 +180,7 @@
 	</dependencyManagement>
 	<description>1.zipkin server必须运行在jdk8环境
 2.zipkin-ui包添加后可看到zipkin UI界面
-3.本项目同时提供了Eureka和Zipkin两种server,需在maven构建时通过指定profile控制启动对应的server，命令：mvn clean packege -P eureka,当使用IDE启动maven时，需配置goal和profiles，同时保证jre为8
+3.本项目同时提供了Eureka和Zipkin两种server,需在maven构建时通过指定profile控制启动对应的server，命令：mvn clean packege -P eureka,当使用IDE启动maven时，需配置goal和profiles，同时保证jre为8(可在run as--maven build---JRE里配置jdk8 )
 4.由于pom父依赖spring-boot-starter-parent里对占位符重定义为“&lt;resource.delimiter&gt;@&lt;/resource.delimiter&gt;”，故本地配置参数占位符时不可使用默认格式“${XXX}”而需改为“@XXX@”,或重新定义maven-resources-plugin覆盖父依赖配置，参见：http://blog.rapasoft.eu/resource-filtering-in-spring-boot
 5.单独启动zipkin server时使用注解@EnableZipkinServer（此时依赖中不可添加stream相关jar）；如使用stream方式接收trace信息时，使用注解@EnableZipkinStreamServer，且同时添加stream相关依赖（见pom注释）
 6.使用stream方式订阅trace信息时，spring-cloud-starter-stream-kafka与spring-cloud-starter-stream-rabbit依赖不可同时使用
