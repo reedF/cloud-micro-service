@@ -23,9 +23,16 @@ eureka:
     fetchRegistry: true
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
-      
+
+#tell Turbine to load the EurekaInstanceDiscovery
+InstanceDiscovery: 
+  impl: com.netflix.turbine.discovery.EurekaInstanceDiscovery.class    
 turbine:
-  #aggregator:
-  #  clusterConfig: SERVICE
+  #aggregator: 
+  #  clusterConfig: eureka    
   appConfig: eureka-service,eureka-client
   clusterNameExpression: new String("default")
+  #cluster名称从各个服务注册到Eureka中的"eureka.instance.metadata-map.cluster"项获取
+  #clusterNameExpression: metadata['cluster']
+
+ 
