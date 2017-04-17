@@ -81,13 +81,15 @@ eureka:
     leaseRenewalIntervalInSeconds: 10
     metadataMap:
       instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${server.port}}}
+      #cluster name for Turbine
+      cluster: C1
   client:
     registerWithEureka: true
     fetchRegistry: true
     serviceUrl:
       # HA-if more eureka server,can using:"," to give a node list for backup,such as "node1,node2"
-      defaultZone: http://localhost:8761/eureka/,http://192.168.59.103:8761/eureka/
-      #defaultZone: http://localhost:8761/eureka/
+      #defaultZone: http://localhost:8761/eureka/,http://192.168.59.103:8761/eureka/
+      defaultZone: http://localhost:8761/eureka/
             
 # zipkin properties for ServiceApplication.java to debug when there is no zipkin server
 sample:
