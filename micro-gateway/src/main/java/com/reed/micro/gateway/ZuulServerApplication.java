@@ -10,6 +10,8 @@ import org.springframework.cloud.sleuth.instrument.zuul.TraceZuulAutoConfigurati
 import org.springframework.context.annotation.Bean;
 
 import com.reed.micro.gateway.filter.HystrixRequestContextServletFilter;
+import com.reed.micro.gateway.filter.LogPostFilter;
+import com.reed.micro.gateway.filter.LogPreFilter;
 
 /**
  * zuul server
@@ -41,5 +43,19 @@ public class ZuulServerApplication {
 	@Bean(name = "hystrixFilter")
 	public Filter HystrixFilter() {
 		return new HystrixRequestContextServletFilter();
+	}
+
+	/**
+	 * zuul filters
+	 * @return
+	 */
+	@Bean
+	public LogPreFilter logpre() {
+		return new LogPreFilter();
+	}
+
+	@Bean
+	public LogPostFilter logpost() {
+		return new LogPostFilter();
 	}
 }
