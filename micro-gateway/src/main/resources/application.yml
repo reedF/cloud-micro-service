@@ -23,7 +23,8 @@ endpoints:
     enabled: true
 
 zuul:
-  sensitiveHeaders: Cookie,Set-Cookie,Authorization
+  #no need to send heads,such as:Cookie,Set-Cookie,Authorization;if all headers need to send to target set this empty
+  sensitiveHeaders: 
   #Service will be mapped under the /api URI
   prefix: /api 
 #  Uncomment to disable auto-registering all services read from Eureka
