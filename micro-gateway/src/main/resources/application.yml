@@ -23,6 +23,7 @@ endpoints:
     enabled: true
 
 zuul:
+  sensitiveHeaders: Cookie,Set-Cookie,Authorization
   #Service will be mapped under the /api URI
   prefix: /api 
 #  Uncomment to disable auto-registering all services read from Eureka
