@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.reed.cloud.micro.base.po.BasePo;
-
 @FeignClient("eureka-service")
 public interface FeignService {
 
@@ -16,6 +14,6 @@ public interface FeignService {
 	public String echo(@RequestParam("str") String str);
 
 	@RequestMapping(value = "/obj", method = GET)
-	public BasePo findObj();
+	public String findObj();
 
 }

@@ -30,10 +30,5 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-feign</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>com.reed.micro.service</groupId>
-			<artifactId>micro-base</artifactId>
-			<version>1.0-SNAPSHOT</version>
-		</dependency>
 	</dependencies>
 </project>
