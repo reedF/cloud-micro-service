@@ -5,6 +5,7 @@ import javax.servlet.Filter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
+import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.cloud.sleuth.instrument.zuul.TraceZuulAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +19,7 @@ import com.reed.micro.gateway.filter.LogPreFilter;
  *
  */
 @EnableZuulProxy
+@EnableFeignClients
 @SpringBootApplication(exclude = { TraceZuulAutoConfiguration.class })
 public class ZuulServerApplication {
 	public static void main(String[] args) {
