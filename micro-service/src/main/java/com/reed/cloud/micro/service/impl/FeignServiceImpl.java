@@ -1,5 +1,7 @@
 package com.reed.cloud.micro.service.impl;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -39,5 +41,13 @@ public class FeignServiceImpl extends BaseAbstractServiceImpl implements
 	public BasePo findObj() {
 		return hystrixService.findObj();
 	}
+
+	@Override
+	public String checkAuth(HttpServletRequest req) {
+		String token = req.getHeader("X-User-Token");
+		return token;
+	}
+	
+	
 
 }

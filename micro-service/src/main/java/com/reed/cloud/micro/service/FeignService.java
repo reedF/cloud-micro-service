@@ -2,8 +2,11 @@ package com.reed.cloud.micro.service;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,9 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.reed.cloud.micro.base.po.BasePo;
 import com.reed.cloud.micro.base.service.BaseService;
 
+import feign.Param;
+
 @FeignClient("eureka-service")
 public interface FeignService extends BaseService {
-
 
 	@RequestMapping(value = "/echo", method = RequestMethod.GET)
 	public String echo(@RequestParam("str") String str);
@@ -26,5 +30,8 @@ public interface FeignService extends BaseService {
 
 	@RequestMapping(value = "/obj", method = GET)
 	public BasePo findObj();
+
+	@RequestMapping(value = "/user/author", method =(RequestMethod.GET))
+	public String checkAuth(HttpServletRequest req);
 
 }

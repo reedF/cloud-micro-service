@@ -1,16 +1,13 @@
 package com.reed.micro.gateway;
 
-import javax.servlet.Filter;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
-import org.springframework.cloud.sleuth.instrument.zuul.TraceZuulAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 
-import com.reed.micro.gateway.filter.HystrixRequestContextServletFilter;
+import com.reed.micro.gateway.feign.client.FeignClientsConf;
+import com.reed.micro.gateway.filter.AuthFilter;
 import com.reed.micro.gateway.filter.LogPostFilter;
 import com.reed.micro.gateway.filter.LogPreFilter;
 
@@ -20,7 +17,7 @@ import com.reed.micro.gateway.filter.LogPreFilter;
  */
 @EnableZuulProxy
 @EnableFeignClients
-@SpringBootApplication(exclude = { TraceZuulAutoConfiguration.class })
+@SpringBootApplication(exclude = { FeignClientsConf.class })
 public class ZuulServerApplication {
 	public static void main(String[] args) {
 
@@ -29,23 +26,23 @@ public class ZuulServerApplication {
 	}
 
 	/**
-	 * 加载hystrix filter,初始化HystrixRequestContext
+	 * 新版hystrix无需显式加载hystrix filter,初始化HystrixRequestContext
 	 * 
 	 * @return
 	 */
-	@Bean
-	public FilterRegistrationBean HystrixFilterRegistration() {
-		FilterRegistrationBean registration = new FilterRegistrationBean();
-		registration.setFilter(HystrixFilter());
-		registration.addUrlPatterns("/*");
-		registration.setName("hystrixFilter");
-		return registration;
-	}
-
-	@Bean(name = "hystrixFilter")
-	public Filter HystrixFilter() {
-		return new HystrixRequestContextServletFilter();
-	}
+//	@Bean
+//	public FilterRegistrationBean HystrixFilterRegistration() {
+//		FilterRegistrationBean registration = new FilterRegistrationBean();
+//		registration.setFilter(HystrixFilter());
+//		registration.addUrlPatterns("/*");
+//		registration.setName("hystrixFilter");
+//		return registration;
+//	}
+//
+//	@Bean(name = "hystrixFilter")
+//	public Filter HystrixFilter() {
+//		return new HystrixRequestContextServletFilter();
+//	}
 
 	/**
 	 * zuul filters
@@ -59,5 +56,10 @@ public class ZuulServerApplication {
 	@Bean
 	public LogPostFilter logpost() {
 		return new LogPostFilter();
+	}
+
+	@Bean
+	public AuthFilter authRoute() {
+		return new AuthFilter();
 	}
 }

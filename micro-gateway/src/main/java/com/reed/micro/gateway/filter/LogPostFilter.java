@@ -36,15 +36,19 @@ public class LogPostFilter extends ZuulFilter {
 	@Override
 	public Object run() {
 		RequestContext ctx = RequestContext.getCurrentContext();
-		try (final InputStream responseDataStream = ctx.getResponseDataStream()) {
-			final String responseData = CharStreams
-					.toString(new InputStreamReader(responseDataStream, "UTF-8"));
-			// setting response for other filers
-			ctx.setResponseBody(responseData);
-			log.info(String.format("POST=============>response is: %s",
-					responseData));
-		} catch (IOException e) {
-			log.warn("Error reading body", e);
+		if (ctx.getResponseDataStream() != null) {
+			try (final InputStream responseDataStream = ctx
+					.getResponseDataStream()) {
+				final String responseData = CharStreams
+						.toString(new InputStreamReader(responseDataStream,
+								"UTF-8"));
+				// setting response for other filers
+				ctx.setResponseBody(responseData);
+				log.info(String.format("POST=============>response is: %s",
+						responseData));
+			} catch (IOException e) {
+				log.warn("Error reading body", e);
+			}
 		}
 		return null;
 	}
