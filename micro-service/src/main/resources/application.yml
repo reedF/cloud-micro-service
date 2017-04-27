@@ -9,6 +9,11 @@ spring:
     config:
       enabled: false
       uri: http://localhost:8888
+      #集成eureka使用，此时无需配置uri
+      discovery:
+        # 默认false，设为true表示使用注册中心中的configserver配置而不自己配置configserver的uri
+        enabled: true                                 
+        serviceId: micro-config-server  
 
     #zipkin output stream,using mq stream format to send trace data 
     stream:
