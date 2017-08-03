@@ -8,9 +8,7 @@
 		<artifactId>cloud-micro-service</artifactId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
-	<groupId>com.reed.micro.service</groupId>
 	<artifactId>micro-rest-client</artifactId>
-	<version>1.0-SNAPSHOT</version>
 	<name>micro-rest-client</name>
 	<url>http://maven.apache.org</url>
 	<properties>

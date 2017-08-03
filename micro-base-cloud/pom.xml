@@ -63,5 +63,7 @@
 	<packaging>pom</packaging>
   <modules>
     <module>micro-boot-admin</module>
+    <module>../micro-eureka-server</module>
+    <module>../micro-gateway</module>
   </modules>
 </project>

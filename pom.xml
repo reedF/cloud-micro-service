@@ -29,9 +29,9 @@
 		<module>micro-rest-client</module>
 		<module>micro-dashboard</module>
 		<module>micro-server</module>
-    <module>micro-gateway</module>
-    <module>micro-base-cloud</module>
-    <module>micro-eureka-server</module>
+		<module>micro-base-cloud</module>
+<!--     	<module>micro-gateway</module>
+    	<module>micro-eureka-server</module> -->
   </modules>
 
 	<dependencies>
