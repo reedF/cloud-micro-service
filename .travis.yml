@@ -6,7 +6,7 @@ sudo: false
 install: true
 jdk: oraclejdk8
 script:
-  - mvn clean test package
+  - mvn clean package -Dmaven.test.skip=true
 before_install:
   - java -version
 after_success:
