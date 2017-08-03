@@ -26,7 +26,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.reed.cloud.micro.eureka.ServiceApplication;
-import com.reed.cloud.micro.feign.controller.FeignController;
 import com.reed.cloud.micro.service.FeignService;
 import com.reed.cloud.micro.service.HystrixService;
 
