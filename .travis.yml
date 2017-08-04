@@ -1,10 +1,8 @@
-services:
-  - redis
-  - docker
-language: java
-sudo: false
-install: true
-jdk: oraclejdk8
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "QKNczYN2fsE6pu+CdatAX74r9yB8v/537JFpTpqNPy5tIoFxu1dxaPm4Y2pvDBhX4OFU/fPPMYLbHxweedWjaJzQR9xw2AwHxUhkxYvVc2vQbe5YQqS9zuzRyK8OR5vqb+9wVaMnMVflNW8NKEeot/dUUgv+E7g3excKQZVeYhUa17Ccl+NiiO+kMhJPj3jZQVvicyUFtbVYMBVpebNypqwMllPsYhusPcrQrvuAcPhNUTONnvJ72ROR7fRtbyapN9+Vs6zvnL5qyzW75+mvBSH8K4WjRpzqPXSTXvVKC9CRKy29OrY4j5qiXlBgjj4TB3TVvAaaIeeLYu6PgCO099lgUKRUgxddMTA4PBGfcgtM87hYHjbOUhSLzhFRJrdvjhJXEb+Mp3VLY6dpkCS+/jU0nPHt1By7CROCiOnZR2eTUH55PW5B5zMGPM9r/UDrdsySnHu8RZW2zbfxXFh4BPCOZjswxiv6CdnS2Er3PdsS3v+BKd/ATEErHzpPWs27rSzDR1Mq4fsqfFNeA/WcVB9Q8Ry1qcI/L7cSUVbHqDvY/GUNhI+dlXOpOBy/Sp0YKqvTx7Wm5Rjuyu9Ldd3HBID5qmRn0lsYjkGErmEEKl1i9gUP9l4GrDrlFmqgIx8jM+G8i8W48NeXRyKnGRzRyhbltgA84xb597i2yYLSOwY="
 addons:
   coverity_scan:
     project:
@@ -14,6 +12,13 @@ addons:
     build_command_prepend: "mvn clean"
     build_command:   "mvn -DskipTests=true compile"
     branch_pattern: master
+services:
+  - redis
+  - docker
+language: java
+sudo: false
+install: true
+jdk: oraclejdk8
 script:
   - mvn clean package -Dmaven.test.skip=true cobertura:cobertura
 before_install:
