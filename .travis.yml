@@ -31,7 +31,7 @@ before_install:
   - docker images
   - docker run --help
   - docker run --name zookeeper --restart always -d zookeeper -p 2181:2181 
-  - docker run -d --name kafka -e HOST_IP=localhost -e KAFKA_ADVERTISED_PORT=9092 -e KAFKA_BROKER_ID=1 -e ZK=zk -p 9092:9092 --link zookeeper:zk
+  - docker run --name kafka -d wurstmeister/kafka -e HOST_IP=localhost -e KAFKA_ADVERTISED_PORT=9092 -e KAFKA_BROKER_ID=1 -e ZK=zk -p 9092:9092 --link zookeeper:zk
    
 after_success:
   - bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN
