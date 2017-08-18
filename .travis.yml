@@ -26,9 +26,9 @@ before_install:
   #coverity_scan
   - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
   #start kafka
-  - docker pull wurstmeister/zookeeper
+  - docker pull zookeeper
   - docker pull wurstmeister/kafka
-  - docker run -d --name zookeeper -p localhost:2181:2181
+  - docker run -d -p 2181:2181 --name zookeeper
   - docker run -d --name kafka -e HOST_IP=localhost -e KAFKA_ADVERTISED_PORT=9092 -e KAFKA_BROKER_ID=1 -e ZK=zk -p 9092:9092 --link zookeeper:zk -t wurstmeister/kafka
    
 after_success:
