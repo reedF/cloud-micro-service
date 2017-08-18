@@ -31,7 +31,7 @@ before_install:
   - docker images
   - docker run --help
   - docker run --name zookeeper --restart always -d zookeeper -p 2181:2181 
-  - docker run wurstmeister/kafka -d -p 9092:9092 
+  - docker run --name kafka -d -p 9092:9092
    
 after_success:
   - bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN
