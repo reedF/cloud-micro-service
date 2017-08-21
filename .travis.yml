@@ -30,8 +30,9 @@ before_install:
   - docker pull wurstmeister/kafka
   - docker images
   - docker run --help
-  - docker run -d -it --name zookeeper -p 127.0.0.1:2181:2181 zookeeper
-  - docker run -d -it --name kafka --link zookeeper:zk -p 127.0.0.1:9092:9092 -e HOST_IP=localhost -e ZK=zk wurstmeister/kafka 
+  #- docker run -d -it --name zookeeper -p 127.0.0.1:2181:2181 zookeeper
+  #- docker run -d -it --name kafka --link zookeeper:zk -p 127.0.0.1:9092:9092 -e HOST_IP=localhost -e ZK=zk wurstmeister/kafka 
+  - docker-compose up -d
   - docker ps -a
   - docker logs zookeeper
   - docker logs kafka
